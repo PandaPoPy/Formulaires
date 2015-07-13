@@ -1,0 +1,215 @@
+<!DOCTYPE hmtl>
+
+<!--
+NOM DU SCRIPT : FORM_01.html
+BY : POPY
+Creation Date : 01/10/2014
+Las Modification Date : 01/06/2015
+OBJET : Form Management
+-->
+
+<html>
+<head>
+	<title>FROM_01</title>
+	<meta content="text/html; charset=utf-8" />
+
+	<!-- Start Script JS -->
+
+	<script type="text/javascript">
+		/* Function Test of Writting*/
+		function nonVide(champ, messageAlerte)
+		{
+			if (champ.value.length == 0)
+			{
+				/* Display Alert Message*/
+				alert(messageAlerte);
+				/* Focus on Error Zone */
+				champ.focus();
+				/* return value */
+				return false;
+			}
+			/* return value*/
+			alert("Votre nom est "+ document.getElementById('nom').value);
+			return true;
+		}
+
+		function estNumerique(champ, messageAlerte)
+		{
+			/* definiton des valeurs acceptées*/
+			var valeursAcceptees = /^[0-9a-zA-Z]+$/;
+			/*test if it is number or characters*/
+			if (champ.value.match(valeursAcceptees))
+			{
+				/* Return Value */
+				alert("Vous avez saisi "+ document.getElementById('nombre').value);
+				return true;
+			}
+			else{
+				/* Dsiplay Alert Message*/
+				alert (messageAlerte);
+				/* Focus on the Item in error*/
+				champ.focus();
+				/* Returned Value */
+				return false;
+			}
+		}
+
+
+		function longueurSaisie(champ, longueurMinimale, longueurMaximale, messageAlerte)
+		{
+			/*test if the length is ok*/
+			if (champ.value.length >= longueurMinimale && champ.value.length <= longueurMaximale)
+			{
+				/* Return Value */
+				alert("Vous avez bien saisi entre 5 et 10 caractères : "+ document.getElementById('saisie').value);
+				return true;
+			}
+			else{
+				/* Dsiplay Alert Message*/
+				alert (messageAlerte);
+				/* Focus on the Item in error*/
+				champ.focus();
+				/* Returned Value */
+				return false;
+			}
+		}
+
+
+		function estEmail(champ, messageAlerte)
+		{
+			/* definiton des valeurs acceptées*/
+			var valeursAcceptees = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-Z0-9]{2,4}$/;
+			/*test if it is an email address */
+			if (champ.value.match(valeursAcceptees))
+			{
+				/* Return Value */
+				alert("Structure adresse email correcte");
+				return true;
+			}
+			else{
+				/* Dsiplay Alert Message*/
+				alert (messageAlerte);
+				/* Focus on the Item in error*/
+				champ.focus();
+				/* Returned Value */
+				return false;
+			}
+		}
+
+		/*function who is testing if one choice was done*/
+		function controlerChoixListe(liste, messageAlerte)
+		{
+			if (liste.value == "Votre sport favori")
+			{
+				/* Display Error Message*/
+				alert (messageAlerte);
+				/*Focus on the field with error*/
+				liste.focus();
+				/* Returned Value */
+				return false;
+			}else{
+				/* Returned Value*/
+				alert("Votre sport préféré : " + liste.value);
+				return true;
+			}
+		}
+
+		/* test function to know which radio button was choosed*/ 
+		function selectionnerSport(messageAlerte)
+		{
+			/*recup proposed sports in a Table*/
+			var tabSports = document.forms.liste_sports.sports;
+			/* determination of number of sports proposed*/
+			var nombreSports = tabSports.length;
+			if (nombreSports>0)
+			{
+				/*parcours du tableau des sports proposés*/
+				var i=0;
+				var sportSelection = false;
+				while (i < nombreSports)
+				{
+					/* test si le sport est celui qui a été sélectionné*/
+					if (tabSports[i].checked)
+					{
+						/* Affichage de contrôle*/
+						alert("Votre sport favori est "+ tabSports[i].value);
+						/* Modification du booleen sportSelection à true*/
+						sportSelection = true;
+					}
+					i = i+1;
+				}
+			}
+			/* Message d'alerte si aucun sport n'a été sélectionné */
+			if (!sportSelection)
+			{
+				/*Message Alerte*/
+				alert(messageAlerte);
+				/*valeur de retour*/
+				return false;
+			}else{
+				/*valeur de retour*/
+				return true;
+			}
+		}
+
+	</script>
+
+</head>
+<body>
+	<h1>FORM_01</h1>
+
+	<script type="text/javascript">
+	alert("FORM_01");
+	</script>
+
+	<form>
+		Votre nom (champ obligatoire) : 
+		<input type="text" id="nom"/>
+		<input type="button" onclick="nonVide(document.getElementById('nom'), 'Saisie obligatoire')" value="Validation" />
+	</form>
+
+	<form>
+		Montant (saisie d'un nombre entier SVP) :
+		<input type="text" id="nombre"/>
+		<input type="button" onclick="estNumerique(document.getElementById('nombre'), 'Saisie nombre entier ou un champ texte SVP')" value='Validation'/>
+	</form>
+
+	<form>
+		CHamp (entre 5 et 1° caractères impérativement) :
+		<input type="text" id="saisie"/>
+		<input type="button" onclick="longueurSaisie(document.getElementById('saisie'), 5, 10, 'Saisie entre 5 et 10 caractères SVP')" value='Validation'/>
+	</form>
+
+	<form>
+		Email (contact@example.com) :
+		<input type="text" id="email"/>
+		<input type="button" onclick="estEmail(document.getElementById('email'), 'Respecter structure email SVP')" value='Validation'/>
+	</form>
+
+	<form>
+		Sport pratiqué :
+		<select id='liste'>
+			<option>Votre sport favori</option>
+			<option>Golf</option>
+			<option>Football</option>
+			<option>Natation</option>
+			<option>Tennis</option>
+		</select>
+		<input type="button" onclick="controlerChoixListe(document.getElementById('liste'), 'Merci de choisir un sport dans la liste')" value="Validation"/>
+	</form>
+
+	<form name="liste_sports">
+		Sport préféré :<br />
+		<input type="radio" name="sports" value="golf">Golf</input><br/>
+		<input type="radio" name="sports" value="rugby">Rugby</input><br/>
+		<input type="radio" name="sports" value="football">Foot</input><br/>
+		<input type="radio" name="sports" value="tennis">Tennis</input><br/>
+		<input type="button" onclick="selectionnerSport('Veuillez sélectionner votre sport préféré')" value="Validation">
+	</form>
+	<!-- Display Source Code
+	<br /></br><br />
+	<center>
+		<a href="Javascript:window.location='view-source:'+window.location">Code source</a>
+	</center>-->
+</body>
+</html>
