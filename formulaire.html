@@ -152,6 +152,77 @@ OBJET : Form Management
 			}
 		}
 
+		/* définition de la fonction JS de création d'un cookie */
+		function creationCookie(nomCookie, valeurCookie, expirationCookie, cheminCookie, domaineCookie, securiteCookie)
+		{
+			document.cookie = nomCookie + ' = ' + escape(valeurCookie) + '  ' + 
+			//la fonction escape réalise un encodage des caractères spéciaux en les remplaçant par une séquence %remplacement où remplacement est un nombre sous forme hexadécimale
+			//bien évidemment à la relecture du cookie un codage inverse devra être fait par la fct unescape()
+			//le paramètre securiteCookie devra être égal à TRUE pour une utilisation en connexion sécurisée HTTPS
+			((expirationCookie == undefined) ? '' : ('; expires=' + expirationCookie.toGMTString())) + ((cheminCookie == undefined) ? '' : 
+				('; path=' + cheminCookie)) + ((domaineCookie == undefined) ? '' : 
+				('; domain =' + domaineCookie)) + ((securiteCookie == true) ? '; 
+				securiteCookie' : '');
+		}
+		/*création d'un cookie*/
+		var dateExpiration = new Date();
+		dateExpiration.setTime(dateExpiration.getTime() + 300 * 1000);
+		//dateExpiration est un objet de type date (par défaut initialisé à la date du système)
+		//la date de fin de validité du cookie est calculée à partir de la date système (5 min plus tard cad ici 300 secondes)
+		//en cas d'absence, par défaut, le cookie sera supprimé automatiquement à la fin de la session (séquence de code, en général du PHP, pendant laquelle la conservation des cookies est prévue)
+		creationCookie("monCookie", "PoPy", dateExpiration, "/");
+		/*
+		**Nom du Cookie : monCookie
+		**Valeur du Cookie : PoPy
+		**Expiration du cookie : dans 5 min (300s)
+		**Accessibilité : Accessible à tout le site
+		*/
+
+		//Message de contrôle
+		document.write("Le cookie monCookie (contenant PoPy) a normalement été écrit sur le disque dur");
+
+		//définition de la fct JS de la lecture d'un cookie
+		function lectureCookie(nomCookie)
+		{
+			//test présence du cookie
+			if (document.cookie.length == 0) {
+				//valeur de retour null
+				return null;
+			}else{
+				/*
+				**Mise en tableau tabElements des éléments du cookie
+				**NB : on se base sur le séparateur point-virgule
+				*/
+				var tabElements = document.cookie.split(";");
+				//recherche du = séparant le nom de l'élément de la valeur de l'élément pour le 1er élément (n° 0)
+				var positionEgal = tabElements[0].indexOf("=", 0);
+				//détermination du nom de l'élément
+				var nomElement = tabElements[0].substring(0, positionEgal);
+				//détermination de la valeur de l'élément
+				var valeurElement = tabElements[0].substring(positionEgal+1);
+				//si le nom de l'élément contient bien le nom correct du cookie
+				if (nomElement == nomCookie) {
+					//retour de la valeur de l'élément (avec remise en place des caractères spéciaux)
+					//NB : cet élément contient normalement PoPy
+					return unescape(valeurElement);
+				}
+				// valeur de retour
+				return null;
+			}
+		}
+
+		/*
+		**Lecture d'un cookie par appel de la fct lectureCookie
+		**NB : le cookie a pour valeur "PoPy" dans notre cas
+		*/
+		if (lectureCookie("monCookie") == null)
+		{
+			document.write("Le cookie monCookie n'a pas été trouvé");
+		}
+		else{
+			document.write("Le cookie monCookie a pour valeur : " + lectureCookie("monCookie"));
+		}
+
 	</script>
 
 </head>
